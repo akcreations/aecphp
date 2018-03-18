@@ -12,23 +12,24 @@ if(isset($_POST['login']))
 $useremail=filter_var($_POST['useremail'],FILTER_SANITIZE_EMAIL);
 $userpass=filter_var($_POST['user_password'],FILTER_SANITIZE_STRING);
 
-$sql="select password from user_info where email_id='$useremail'";
+$sql="select password,user_id,first_name from user_info where email_id='$useremail'";
 $res=mysqli_query($con,$sql);
 $row=mysqli_fetch_array($res);
 $count = mysqli_num_rows($res);
 if($count==1)
 {
 	$dbstring=$row[0];
- $split=explode('$',$dbstring);
+ /*$split=explode('$',$dbstring);
   $logpass=substr(checkhash($split[0],$split[1],$userpass),0,MAX_LENGTH);
  
   if($logpass==$dbstring)
-  {
-  	echo '<script type="text/javascript">';
-     echo 'alert("Login credentials are correct")';
-      echo '</script>';
-      header('Location:index.html');
- }
+  {*/
+  	 session_start();
+$_SESSION["name"]=$row[2];
+$_SESSION["uid"]=$row[1];
+header('Location:index.php');
+
+ //}
  } 
 
 

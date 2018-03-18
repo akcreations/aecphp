@@ -5,13 +5,11 @@
   if(isset($_POST['register']))
               { 
                             	 
-                            		$firstname =filter_var($_POST['fname'],FILTER_SANITIZE_STRING);
+                            		$firstname =filter_var($_POST['fname'],FILTER_SANITIZE_STRING);   //or equal to $_POST['fname']
                             		$lastname =filter_var($_POST['lname'],FILTER_SANITIZE_STRING);
                             		$gender =filter_var($_POST['gender'],FILTER_SANITIZE_STRING);
                                 $emailid=filter_var($_POST['email'],FILTER_SANITIZE_EMAIL);
                                 $contactno =filter_var($_POST['contactno'],FILTER_SANITIZE_NUMBER_INT);
-                            		$category =filter_var($_POST['desg'],FILTER_SANITIZE_STRING);
-                            		$depart =filter_var($_POST['dept'],FILTER_SANITIZE_STRING);
                             		$organization =filter_var($_POST['orgzn'],FILTER_SANITIZE_STRING);
                             		$password =filter_var($_POST['password'],FILTER_SANITIZE_STRING);
                                 $cnfrm=filter_var($_POST['cnfrm'],FILTER_SANITIZE_STRING);
@@ -20,10 +18,10 @@
                           {         
                                  
             
-                              $hashpassword=substr(generateHashWithSalt($password),0,MAX_LENGTH);
+                              //$hashpassword=substr(generateHashWithSalt($password),0,MAX_LENGTH);
                               //call the hashing function and store the first 100 charactes
 
-		                                 $sql="INSERT INTO user_info (first_name,last_name,gender,email_id,contact,category,organization,password,dept_id)values('{$firstname}','{$lastname}','{$gender}','{$emailid}','{$contactno}','{$category}','{$organization}','{$hashpassword}','{$depart}')";
+		                                 $sql="INSERT INTO user_info (first_name,last_name,gender,email_id,contact,organization,password)values('{$firstname}','{$lastname}','{$gender}','{$emailid}','{$contactno}','{$organization}','{$password}')";
         
                                         $result = mysqli_query($con,$sql);//execute query
               
@@ -32,6 +30,7 @@
                                               echo '<script type="text/javascript">';
                                               echo 'alert("You have been registered !! your Account will be activated within 24 Contact: hack4i.cea@gmail.com if you face any problem")';
                                               echo '</script>';// alert user about successful registration
+                                              header('Location:login.php');
                                             } 
 
                                             else
@@ -142,37 +141,8 @@ mysqli_close($con);
           <input name="contactno" type ="text" class="form-control" id="contactno" maxlength="10" placeholder="Enter contact number" pattern="[789][0-9]{9}" required>
         </div>
      </div>
-     <div class="form-group">
-        <label for="category" class="control-label col-xs-2">Category</label>
-        <div class="col-xs-5">
-        Student:
-           <input name="desg" type ="radio"  id="desg" value="S" required >
-           Expert:
-           <input name="desg" type ="radio"  id="desg" value="E" required>
-        </div>
-     </div>
-     <div class="form-group">
-        <label for="dept" class="control-label col-xs-2">Department</label>
-        <div class="col-xs-5">
-    <?php  
-$stmnt= "SELECT * FROM dept_info";
+    
 
-$result = $con->query($stmnt) or die(mysqli_error($con)."[".$stmnt."]");
-
-?>
-
-<select name="dept" required>
-<option value="">Select</option>
-<?php 
-while ($row = mysqli_fetch_array($result))
-{
-    echo "<option value=".$row['dept_id'].">".$row['dept_name']."</option>";
-}
-mysqli_close($con);
-?>        
-</select>
-        </div>
-     </div>
      <div class="form-group">
         <label for="orgzn" class="control-label col-xs-2">Organization</label>
         <div class="col-xs-5">
